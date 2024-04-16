@@ -30,11 +30,12 @@ En este enlace tenemos un tablero Scrum donde podemos visualizar los avanzes del
 
 ## CRUD Inicial
 El CRUD es basico es para probar como funcionaria en el futuro la creacion de un usuario utilizamos la tabla USUARIOS para probrar el CRUD se realizo en Django se utilo mysql con phpmyadmin en el programa xampp
-django 3.2.22
-pip  24.0
-pymysql 1.1.0
-mysqlclient 2.2.4
-python 3.9
-xampp 8.2.12
+### Tecnologías utilizadas:
+- **Django:** Versión 3.2.22
+- **pip:** Versión 24.0
+- **PyMySQL:** Versión 1.1.0
+- **mysqlclient:** Versión 2.2.4
+- **Python:** Versión 3.9
+- **XAMPP:** Versión 8.2.12
 
 [Link de carpeta dentro del repositorio de Git](https://github.com/frcerdas/reservas-pacific-reef/tree/alexis/Hotel)
