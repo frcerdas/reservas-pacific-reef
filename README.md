@@ -49,10 +49,10 @@ Incluímos los siguientes documentos asociados a la metodología ágil aplicados
 
 ### Documentos UML 4+1
 
-[Vista Escenario, Diagrama Caso de Uso](https://github.com/frcerdas/reservas-pacific-reef/blob/alexis/Documentacion/VISTA%20ESCENARIO;%20DIAGRAMA%20DE%20CASO%20DE%20USO.png?raw=true)
-[Vista Lógica, Diagrama de Clases](https://github.com/frcerdas/reservas-pacific-reef/blob/alexis/Documentacion/VISTA%20LOGICA%20DIAGRAMA%20DE%20CLASES.png?raw=true)
-[Vista de Procesos, Diarama de Actividad](https://github.com/frcerdas/reservas-pacific-reef/blob/alexis/Documentacion/VISTA%20DE%20PROCESO%20DIAGRAMA%20DE%20ACTIVIDAD.png?raw=true)
-[Modelo de Base de Datos inicial (CRUD básico)](https://github.com/frcerdas/reservas-pacific-reef/blob/alexis/Documentacion/MODELO%20DE%20BASE%20DE%20DATOS%20INICIAL.png?raw=true)
+[Vista Escenario, Diagrama Caso de Uso](https://github.com/frcerdas/reservas-pacific-reef/blob/main/docs/VISTA%20ESCENARIO;%20DIAGRAMA%20DE%20CASO%20DE%20USO.png?raw=true)
+[Vista Lógica, Diagrama de Clases](https://github.com/frcerdas/reservas-pacific-reef/blob/main/docs/VISTA%20LOGICA%20DIAGRAMA%20DE%20CLASES.png?raw=true)
+[Vista de Procesos, Diarama de Actividad](https://github.com/frcerdas/reservas-pacific-reef/blob/main/docs/VISTA%20DE%20PROCESO%20DIAGRAMA%20DE%20ACTIVIDAD.png?raw=true)
+[Modelo de Base de Datos inicial (CRUD básico)](https://github.com/frcerdas/reservas-pacific-reef/blob/main/docs/MODELO%20DE%20BASE%20DE%20DATOS%20INICIAL.png?raw=true)
 [StarUML](https://github.com/frcerdas/reservas-pacific-reef/blob/alexis/Documentacion/UML%204%2B1.mdj)
 
 ### CRUD Inicial
