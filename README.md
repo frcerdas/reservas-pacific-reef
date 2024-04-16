@@ -17,5 +17,10 @@ En este enlace tenemos un tablero Scrum donde podemos visualizar los avanzes del
 [Trello](https://trello.com/invite/b/4irnkfkE/ATTI6005aea4589e68b96bb574eada99d3f983534034/mi-tablero-de-trello)
 
 ## UML 4+1
+![VISTA ESCENARIO; DIAGRAMA DE CASO DE USO](https://github.com/frcerdas/reservas-pacific-reef/blob/alexis/Documentacion/VISTA%20ESCENARIO;%20DIAGRAMA%20DE%20CASO%20DE%20USO.png?raw=true)
 
+![VISTA LOGICA DIAGRAMA DE CLASES](https://github.com/frcerdas/reservas-pacific-reef/blob/alexis/Documentacion/VISTA%20LOGICA%20DIAGRAMA%20DE%20CLASES.png?raw=true)
 
+![VISTA DE PROCESO DIAGRAMA DE ACTIVIDAD](https://github.com/frcerdas/reservas-pacific-reef/blob/alexis/Documentacion/VISTA%20DE%20PROCESO%20DIAGRAMA%20DE%20ACTIVIDAD.png?raw=true)
+
+![MODELO DE BASE DE DATOS INICIAL](https://github.com/frcerdas/reservas-pacific-reef/blob/alexis/Documentacion/MODELO%20DE%20BASE%20DE%20DATOS%20INICIAL.png?raw=true)
