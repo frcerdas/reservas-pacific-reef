@@ -24,3 +24,5 @@ En este enlace tenemos un tablero Scrum donde podemos visualizar los avanzes del
 ![VISTA DE PROCESO DIAGRAMA DE ACTIVIDAD](https://github.com/frcerdas/reservas-pacific-reef/blob/alexis/Documentacion/VISTA%20DE%20PROCESO%20DIAGRAMA%20DE%20ACTIVIDAD.png?raw=true)
 
 ![MODELO DE BASE DE DATOS INICIAL](https://github.com/frcerdas/reservas-pacific-reef/blob/alexis/Documentacion/MODELO%20DE%20BASE%20DE%20DATOS%20INICIAL.png?raw=true)
+
+[STARUML ORIGINAL ARCHIVO](https://github.com/frcerdas/reservas-pacific-reef/blob/alexis/Documentacion/UML%204%2B1.mdj)
