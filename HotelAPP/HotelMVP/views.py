@@ -1,15 +1,62 @@
 from django.shortcuts import render, HttpResponse
 from .models import Habitaciones, Reservas
-from django.views.generic import ListView, FormView
+from django.views.generic import ListView, FormView, View
 from .forms import DisponibilidadForm
 from HotelMVP.reservas_funciones.disponibilidad import revisar_disponibilidad
 
 # Create your views here.
-class HabitacionesLista(ListView):
+class HabitacionesListaVista(ListView):
     model = Habitaciones
 
 class ReservasLista(ListView):
     model = Reservas
+
+class HabitacionDetallesVista(View):
+    def get(self, request, *args, **kwargs):
+        categoria = self.kwargs.get('categoria', None)
+        form = DisponibilidadForm()
+        habitaciones_list = Habitaciones.objects.filter(categoria=categoria)
+        if len(habitaciones_list) > 0:
+            habitacion = habitaciones_list [0]
+            habitacion_categoria = dict(habitacion.HAB_CATEGORIA).get(habitacion.categoria, None)
+            context = {
+                'habitaciones_list': habitaciones_list,
+                'categoria': categoria,
+                'habitacion_categoria': habitacion_categoria,
+                'form': form
+            }
+            return render(request, 'habitaciones_detalles_view.html', context)
+        else:
+            return HttpResponse('Categoria no existe.')
+
+    def post(self, request, *args, **kwargs):
+        categoria = self.kwargs.get('categoria', None)
+        habitaciones_list = Habitaciones.objects.filter(categoria=categoria)
+        disponibilidad_habitaciones = []
+        form = DisponibilidadForm(request.POST)
+
+        if form.is_valid():
+            data = form.cleaned_data
+            
+        for habitacion in habitaciones_list:
+            if revisar_disponibilidad(habitacion, data['fecha_inicio'], data['fecha_fin']):
+                disponibilidad_habitaciones.append(habitacion)
+
+        if disponibilidad_habitaciones:
+            habitacion = disponibilidad_habitaciones[0]
+            reserva = Reservas.objects.create(
+                user=request.user,
+                habitacion=habitacion,
+                fecha_inicio=data['fecha_inicio'],
+                fecha_fin=data['fecha_fin']
+            )
+            reserva.save()
+            return HttpResponse(f'Reserva creada para {reserva.habitacion} desde {reserva.fecha_inicio} hasta {reserva.fecha_fin}')
+        else:
+            return HttpResponse('Todas las habitaciones de esta categoria están reservadas. Intente otra categoria.')
+
+
+
 
 class ReservasVista(FormView):
     form_class = DisponibilidadForm
