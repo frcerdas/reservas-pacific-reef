@@ -3,10 +3,26 @@ from .models import Habitaciones, Reservas
 from django.views.generic import ListView, FormView, View
 from .forms import DisponibilidadForm
 from HotelMVP.reservas_funciones.disponibilidad import revisar_disponibilidad
-
+from django.urls import reverse
 # Create your views here.
-class HabitacionesListaVista(ListView):
-    model = Habitaciones
+def HabitacionesListaVista(request):
+    habitacion = Habitaciones.objects.all()[0]
+    habitacion_categorias = dict(habitacion.HAB_CATEGORIA)
+
+    # Crear lista para mantener las categorías y sus URLs
+    habitacion_list = []
+    for habitacion_categoria in habitacion_categorias:
+        # Construir la URL para cada categoría
+        habitacion_url = reverse('HotelMVP:HabitacionDetallesVista', kwargs={'categoria': habitacion_categoria})
+        habitacion_list.append({'categoria': habitacion_categoria, 'url': habitacion_url, 'descripción': habitacion.descripción, })
+
+    # Preparar el contexto con la lista de categorías
+    context = {
+        'habitacion_list': habitacion_list,
+    }
+
+    return render(request, 'habitaciones_list_view.html', context)
+
 
 class ReservasLista(ListView):
     model = Reservas
