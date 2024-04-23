@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles Habitacion</title>
+    <script src="https://kit.fontawesome.com/692189991f.js" crossorigin="anonymous"></script>
+    <!--Main css-->
+    <link rel="stylesheet" href="{% static 'HotelMVP/css/detalles.css' %}">
+
+</head>
+
+<body>
+    <!--Main contenido-->
+    <div class="contenido">
+
+        <!--habitacion imagen-->
+
+        <div class="imagen">
+            <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt="">
+        </div>
+
+        <!--habitacion detalles-->
+        <div class="habitacion">
+
+            <!-- div 1 volver al inicio o home -->
+            <div class="home">
+                <a href="{% url 'HotelMVP:HabitacionesListaVista' %}"><i class="fas fa-arrow-alt-circle-left">Inicio</i></a>
+            </div>
+
+
+            <!--div 2 informacion habitacion-->
+            <div class="habitacion-info">
+                <h1>{{ categoria }}</h1>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eveniet ratione vel expedita quidem dignissimos illo consequuntur. Illo corrupti et reprehenderit quae odio debitis nemo animi ea nesciunt ipsa! Harum, velit!</p>
+            </div>
+            <!--div 3 formulario reserva habitacion-->
+            <form id=reserva-form action="" method="POST">
+                
+                {% csrf_token %}
+
+                <!--input div-->
+                <div class="input-div"> 
+                    <label for="id_fecha_inicio">Entrada: </label>
+                    <input type="datetime-local" id="id_fecha_inicio" name="fecha_inicio">
+                </div>
+                <!--input div-->
+                <div class="input-div">
+                    <label for="id_fecha_fin">Salida: </label>
+                    <input type="datetime-local" id="id_fecha_fin" name="fecha_fin">
+                </div>
+                
+                <!--input div-->
+                <div class="input-div">
+                    <button type="submit">Lista de habitaciones</button>
+                </div>
+            
+            </form>
+
+        </div><!---fin habitaciones div-->
+
+    </div><!---fin contenido main-->
+</body>
+</html>

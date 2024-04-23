@@ -28,6 +28,7 @@ Proyecto basado en Django y usando metodología ágil.
 ## Tecnologías usadas
 
 - **Django** v3.2.22
+- **Django-shortcuts** v1.6
 - **PiP** v24.0
 - **PyMySQL** v1.1.0
 - **MySQLClient** v2.2.4
