@@ -26,6 +26,15 @@ def HabitacionesListaVista(request):
 
 class ReservasLista(ListView):
     model = Reservas
+    
+    def get_queryset(self, *args, **kwargs):
+        if self.request.user.is_staff:
+            reservas_list = Reservas.objects.all()
+            return reservas_list
+        else:
+            reservas_list = Reservas.objects.filter(user=self.request.user)
+            return reservas_list
+
 
 class HabitacionDetallesVista(View):
     def get(self, request, *args, **kwargs):
