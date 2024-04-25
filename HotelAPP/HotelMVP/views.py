@@ -14,7 +14,7 @@ def HabitacionesListaVista(request):
     for habitacion_categoria in habitacion_categorias:
         # Construir la URL para cada categoría
         habitacion_url = reverse('HotelMVP:HabitacionDetallesVista', kwargs={'categoria': habitacion_categoria})
-        habitacion_list.append({'categoria': habitacion_categoria, 'url': habitacion_url, 'descripción': habitacion.descripción, })
+        habitacion_list.append({'categoria': habitacion_categoria, 'url': habitacion_url, 'descripción': habitacion.descripción, 'precio': habitacion.precio})
 
     # Preparar el contexto con la lista de categorías
     context = {
@@ -43,10 +43,12 @@ class HabitacionDetallesVista(View):
         habitaciones_list = Habitaciones.objects.filter(categoria=categoria)
         if len(habitaciones_list) > 0:
             habitacion = habitaciones_list [0]
+            capacidad = habitacion.capacidad
             habitacion_categoria = dict(habitacion.HAB_CATEGORIA).get(habitacion.categoria, None)
             context = {
                 'habitaciones_list': habitaciones_list,
                 'categoria': categoria,
+                'capacidad': capacidad,
                 'habitacion_categoria': habitacion_categoria,
                 'form': form
             }
@@ -69,9 +71,11 @@ class HabitacionDetallesVista(View):
 
         if disponibilidad_habitaciones:
             habitacion = disponibilidad_habitaciones[0]
+            capacidad = habitacion.capacidad
             reserva = Reservas.objects.create(
                 user=request.user,
                 habitacion=habitacion,
+                capacidad=capacidad,
                 fecha_inicio=data['fecha_inicio'],
                 fecha_fin=data['fecha_fin']
             )

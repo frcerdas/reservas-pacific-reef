@@ -1,13 +1,57 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservas Lista</title>
+    <title>Habitaciones lista</title>
+    <script src="https://kit.fontawesome.com/692189991f.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'HotelMVP/css/reservas_list.css' %}">
 </head>
+
 <body>
-    {%for reservas in reservas_list%}
-    <h2>{{reservas}}</h2>
-    {% endfor %}
+    <div class="contenido">
+        <div class="header">
+            <div class="headings">
+                <h1>Tus reservas</h1>
+                <h2>Bienvenido {{user}}</h2>
+            </div>
+            <div class="inicio">
+                <!-- Div 1: Volver al inicio -->
+                <div class="inicio">
+                    <a href="{% url 'HotelMVP:HabitacionesListaVista' %}"><i class="fas fa-arrow-alt-circle-left">Inicio</i></a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="reservas">
+            {% for reservas in reservas_list %}
+            <div class="reserva">
+                <img src="https://images.unsplash.com/photo-1560067174-c5a3a8f37060?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80"
+                    alt="">
+                <div>
+                    <h2>Habitacion {{ reservas.habitacion.categoria }}</h2>
+                </div>
+                <div>
+                    <h3>Desde: {{reservas.fecha_inicio}}</h3>
+                </div>
+                <div>
+                    <h3>Hasta: {{reservas.fecha_fin}}</h3>
+                </div>
+                <div>
+                    <h3>Capacidad: {{reservas.habitacion.capacidad}}</h3>
+                </div>
+                <div>
+                    <h3>Precio: ${{ reservas.habitacion.precio }}</h3>
+                </div>
+                <div class="cancelar"><a href="{{Habitaciones.cancelar_reserva}}" class="invisible"><i
+                            class="far fa-2x fa-times-circle"> Cancelar
+                            Reserva</i></a></div>
+            </div>
+            {% endfor %}
+        </div>
 </body>
+
 </html>
