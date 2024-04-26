@@ -4,8 +4,8 @@
     box-sizing: border-box;
 }
 body{
-    background-color: rgb(46, 47, 48);
-    color: rgb(236, 235, 228);
+    background-color: rgb(1, 153, 255);
+    color: rgb(0,0,0);
     font-family: sans-serif;
     line-height: 1.25;
     height: 100vh;
@@ -84,5 +84,5 @@ button{
 
 button:hover{
     color:#dfdfdf;
-    background-color: rgb(6, 137, 245);
+    background-color: rgb(101, 102, 104);
 }

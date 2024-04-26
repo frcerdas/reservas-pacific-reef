@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse_lazy
 # Create your models here.
 
 #Tabla Habitaciones 
@@ -35,5 +36,14 @@ class Reservas(models.Model):
     estado = models.CharField(max_length=20, choices=ESTADO_RESERVAS)
 
     def __str__(self):
-        return f'{self.user} a reservado la {self.habitacion} desde {self.fecha_inicio} hasta {self.fecha_fin}'
+        return f'Desde = {self.fecha_inicio.strftime("%d-%b-%Y %H:%M")} Hasta = {self.fecha_fin.strftime("%d-%b-%Y %H:%M")}'
+
+    def get_habitacion_categoria(self):
+        habitacion_categorias = dict(self.habitacion.HAB_CATEGORIA)
+        habitacion_categoria = habitacion_categorias.get(self.habitacion.categoria)
+        return habitacion_categoria
     
+    def get_cancelar_reserva_url(self):
+        return reverse_lazy('HotelMVP:CancelarReservaVista', args=[self.pk])
+    
+

@@ -1,9 +1,9 @@
 from django.shortcuts import render, HttpResponse
 from .models import Habitaciones, Reservas
-from django.views.generic import ListView, FormView, View
+from django.views.generic import ListView, FormView, View, DeleteView
 from .forms import DisponibilidadForm
 from HotelMVP.reservas_funciones.disponibilidad import revisar_disponibilidad
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 # Create your views here.
 def HabitacionesListaVista(request):
     habitacion = Habitaciones.objects.all()[0]
@@ -24,8 +24,9 @@ def HabitacionesListaVista(request):
     return render(request, 'habitaciones_list_view.html', context)
 
 
-class ReservasLista(ListView):
+class ReservasListaVista(ListView):
     model = Reservas
+    template_name ="reservas_list_view.html"
     
     def get_queryset(self, *args, **kwargs):
         if self.request.user.is_staff:
@@ -47,7 +48,6 @@ class HabitacionDetallesVista(View):
             habitacion_categoria = dict(habitacion.HAB_CATEGORIA).get(habitacion.categoria, None)
             context = {
                 'habitaciones_list': habitaciones_list,
-                'categoria': categoria,
                 'capacidad': capacidad,
                 'habitacion_categoria': habitacion_categoria,
                 'form': form
@@ -75,7 +75,6 @@ class HabitacionDetallesVista(View):
             reserva = Reservas.objects.create(
                 user=request.user,
                 habitacion=habitacion,
-                capacidad=capacidad,
                 fecha_inicio=data['fecha_inicio'],
                 fecha_fin=data['fecha_fin']
             )
@@ -113,3 +112,8 @@ class ReservasVista(FormView):
         else:
             return HttpResponse('Todas las habitaciones de esta categoria están reservadas!! Inténte otra categoria')
 
+
+class CancelarReservaVista(DeleteView):
+    template_name= 'reservas_cancelar_view.html'
+    model=Reservas
+    success_url = reverse_lazy('HotelMVP:ReservasListaVista')

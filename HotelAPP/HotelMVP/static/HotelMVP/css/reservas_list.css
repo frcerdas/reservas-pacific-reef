@@ -60,7 +60,7 @@ img{
 }
 a i{
     margin: 1rem;
-    color:rgb(236, 235, 228);
+    color:rgb(0, 0, 0);
     text-decoration: none;
 }
 .inicio a i{
@@ -80,9 +80,8 @@ h1,h2{
 
 .reserva:hover .cancelar a i,.cancelar a i:hover{
     visibility: visible;
-  opacity: 1;
+    opacity: 0.5;
 }
 .cancelar a i:hover{
     color: rgb(206, 43, 43);
-    
 }

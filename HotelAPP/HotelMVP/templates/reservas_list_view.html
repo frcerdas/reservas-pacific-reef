@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Habitaciones lista</title>
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
     <script src="https://kit.fontawesome.com/692189991f.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'HotelMVP/css/reservas_list.css' %}">
 </head>
@@ -20,10 +21,9 @@
             <div class="inicio">
                 <!-- Div 1: Volver al inicio -->
                 <div class="inicio">
-                    <a href="{% url 'HotelMVP:HabitacionesListaVista' %}"><i class="fas fa-arrow-alt-circle-left">Inicio</i></a>
+                    <a href="{% url 'HotelMVP:HabitacionesListaVista' %}"><i class="fas fa-arrow-alt-circle-left">Home</i></a>
                 </div>
             </div>
-
         </div>
 
         <div class="reservas">
@@ -32,7 +32,7 @@
                 <img src="https://images.unsplash.com/photo-1560067174-c5a3a8f37060?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80"
                     alt="">
                 <div>
-                    <h2>Habitacion {{ reservas.habitacion.categoria }}</h2>
+                    <h2>Habitacion {{reservas.get_habitacion_categoria}}</h2>
                 </div>
                 <div>
                     <h3>Desde: {{reservas.fecha_inicio}}</h3>
@@ -46,12 +46,12 @@
                 <div>
                     <h3>Precio: ${{ reservas.habitacion.precio }}</h3>
                 </div>
-                <div class="cancelar"><a href="{{Habitaciones.cancelar_reserva}}" class="invisible"><i
-                            class="far fa-2x fa-times-circle"> Cancelar
-                            Reserva</i></a></div>
-            </div>
-            {% endfor %}
+                <div class="cancelar"><a href="{{ reservas.get_cancelar_reserva_url }}" class="invisible"><i
+                    class="far fa-2x fa-times-circle"> Cancelar
+                    Reserva</i></a></div>
         </div>
+            {% endfor %}
+    </div>
 </body>
 
 </html>
