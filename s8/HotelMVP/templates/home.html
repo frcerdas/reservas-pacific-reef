@@ -1,0 +1,25 @@
+<!-- home.html -->
+{% extends 'base.html' %} {% block title %}Bienvenido al Hotel MVP{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h2>Página de inicio</h2>
+      <p>
+        Este es un hotel de clase mundial donde puedes disfrutar de una estancia
+        lujosa.
+      </p>
+      <p>Explora nuestras secciones:</p>
+      <ul>
+        <li>
+          <a href="{% url 'HotelMVP:HabitacionesListaVista' %}">Habitaciones</a>
+        </li>
+        <li><a href="{% url 'HotelMVP:ReservasLista' %}">Reservas</a></li>
+        <li>
+          <a href="{% url 'HotelMVP:ReservasVista' %}">Hacer una reserva</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

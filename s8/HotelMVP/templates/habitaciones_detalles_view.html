@@ -1,0 +1,249 @@
+{% extends 'base.html' %} {% block title %}Detalle de Habitación{% endblock %}
+{% block content %}
+<div id="habitacion-detalles" class="container">
+  <div class="row">
+    <div class="col-md-5">
+      <!-- Carrusel de imágenes -->
+      <div
+        id="carouselExampleIndicators"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <div class="carousel-indicators">
+          <button
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide-to="0"
+            class="active"
+          ></button>
+          <button
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide-to="1"
+          ></button>
+          <button
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide-to="2"
+          ></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img
+              src="{{ habitacion.imagen_1.url }}"
+              class="d-block w-100"
+              alt="Imagen 1"
+            />
+          </div>
+          <div class="carousel-item">
+            <img
+              src="{{ habitacion.imagen_2.url }}"
+              class="d-block w-100"
+              alt="Imagen 2"
+            />
+          </div>
+          <div class="carousel-item">
+            <img
+              src="{{ habitacion.imagen_3.url }}"
+              class="d-block w-100"
+              alt="Imagen 3"
+            />
+          </div>
+        </div>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExampleIndicators"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExampleIndicators"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <!-- Div 2: Información de habitación -->
+      <div class="habitacion-info">
+        <h3>Habitación {{ habitacion.numero }}</h3>
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="pills-descripcion-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#pills-descripcion"
+              type="button"
+              role="tab"
+              aria-controls="pills-descripcion"
+              aria-selected="true"
+            >
+              Descripción
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="pills-caracteristicas-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#pills-caracteristicas"
+              type="button"
+              role="tab"
+              aria-controls="pills-caracteristicas"
+              aria-selected="false"
+            >
+              Características
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="pills-reserva-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#pills-reserva"
+              type="button"
+              role="tab"
+              aria-controls="pills-reserva"
+              aria-selected="false"
+            >
+              Reserva
+            </button>
+          </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+          <div
+            class="tab-pane fade show active"
+            id="pills-descripcion"
+            role="tabpanel"
+            aria-labelledby="pills-descripcion-tab"
+            tabindex="0"
+          >
+            {{ habitacion.descripción|linebreaks }}
+          </div>
+          <div
+            class="tab-pane fade"
+            id="pills-caracteristicas"
+            role="tabpanel"
+            aria-labelledby="pills-caracteristicas-tab"
+            tabindex="0"
+          >
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th scope="row">Precio</th>
+                  <td>{{ habitacion.precio }}</td>
+                </tr>
+                <tr></tr>
+                <tr>
+                  <th scope="row">Ubicación</th>
+                  <td>{{ habitacion.get_ubicacion_display }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Estado</th>
+                  <td>{{ habitacion.estado }}</td>
+                </tr>
+                <tr></tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="pills-reserva"
+            role="tabpanel"
+            aria-labelledby="pills-reserva-tab"
+            tabindex="0"
+          >
+            <!-- Div 3: Formulario reserva habitación -->
+            <form id="reserva-form" action="" method="POST" class="mt-3">
+              {% csrf_token %}
+              <!-- Input div 1 -->
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Entrada:</span>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  id="id_fecha_inicio"
+                  name="fecha_inicio"
+                />
+              </div>
+
+              <!-- Input div 2 -->
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">Salida:</span>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  id="id_fecha_fin"
+                  name="fecha_fin"
+                />
+              </div>
+
+              <div id="precio-calculado" class="mt-3" style="display: none">
+                <p>
+                  <strong>Valor total: <span id="precio"></span></strong>
+                </p>
+              </div>
+
+              <!-- Input div 3 -->
+              <div class="input-group mb-3">
+                <button type="submit" class="btn btn-primary">
+                  Ir a pagar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  // Función para calcular el precio
+  function calcularPrecio() {
+    // Capturar las fechas de entrada y salida
+    var fechaInicio = document.getElementById('id_fecha_inicio').value;
+    var fechaFin = document.getElementById('id_fecha_fin').value;
+
+    // Verificar si ambas fechas han sido seleccionadas
+    if (fechaInicio && fechaFin) {
+      // Convertir las fechas a objetos de fecha
+      var inicio = new Date(fechaInicio);
+      var fin = new Date(fechaFin);
+
+      // Calcular la diferencia de días
+      var diferencia = Math.ceil((fin - inicio) / (1000 * 60 * 60 * 24));
+
+      // Obtener el precio de la habitación
+      var precio = {{ habitacion.precio }};
+
+      // Calcular el precio total
+      var precioTotal = diferencia * precio;
+
+      // Formatear el precio con puntos entre miles
+      var precioFormateado = precioTotal.toLocaleString();
+
+      // Mostrar el precio total en el div correspondiente
+      document.getElementById('precio').textContent = "$" + precioFormateado;
+
+      // Mostrar el elemento #precio-calculado
+      document.getElementById('precio-calculado').style.display = 'block';
+    } else {
+      // Si alguna de las fechas no ha sido seleccionada, ocultar el elemento #precio-calculado
+      document.getElementById('precio-calculado').style.display = 'none';
+    }
+  }
+
+  // Llamar a la función calcularPrecio cuando cambien las fechas
+  document.getElementById('id_fecha_inicio').addEventListener('change', calcularPrecio);
+  document.getElementById('id_fecha_fin').addEventListener('change', calcularPrecio);
+</script>
+
+{% endblock %}

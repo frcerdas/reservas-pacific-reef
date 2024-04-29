@@ -1,0 +1,25 @@
+<!-- pago.html -->
+{% extends 'base.html' %}
+{% block title %}Pagar Reserva{% endblock %}
+{% block content %}
+<div class="container">
+  <h1>Pagar Reserva</h1>
+  <p>Detalles de la reserva:</p>
+  <p>Habitación: {{ reserva.habitacion }}</p>
+  <p>Fecha de inicio: {{ reserva.fecha_inicio }}</p>
+  <p>Fecha de fin: {{ reserva.fecha_fin }}</p>
+  <p>Precio total: ${{ precio_total }}</p>
+  
+  <form method="POST" action="{% url 'banco' %}">
+    {% csrf_token %}
+    <input type="hidden" name="reserva_id" value="{{ reserva.id }}">
+    <label for="estado_pago">Estado del pago:</label>
+    <select name="estado_pago" id="estado_pago">
+      {% for estado in reserva.ESTADO_PAGO %}
+      <option value="{{ estado.0 }}">{{ estado.1 }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Confirmar Pago</button>
+  </form>
+</div>
+{% endblock %}

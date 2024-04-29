@@ -1,0 +1,52 @@
+:root {
+  --text: #818181;
+  --verde-oscuro: #2a889c;
+}
+
+:root,
+[data-bs-theme="light"] {
+  --bs-body-font-family: Roboto, sans-serif;
+  --bs-body-color: var(--text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--verde-oscuro);
+  padding-bottom: 0.5em;
+}
+
+.navbar-brand img {
+  height: 60px;
+  width: auto;
+}
+
+body {
+  padding-top: 90px;
+}
+
+.table {
+  --bs-table-color: var(--text);
+}
+
+#habitacion-detalles .habitacion-info .table,
+#habitacion-detalles .habitacion-info form {
+  width: 50%;
+}
+
+.nav-pills {
+  --bs-nav-pills-link-active-bg: var(--verde-oscuro);
+  --bs-nav-link-hover-color: var(--verde-oscuro);
+  --bs-nav-link-color: var(--verde-oscuro);
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--verde-oscuro);
+}
+
+.btn:hover {
+  --bs-btn-hover-bg: var(--verde-oscuro);
+}

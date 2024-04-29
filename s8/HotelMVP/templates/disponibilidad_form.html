@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% block title %}Bienvenido al Hotel MVP{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <form action="" method="post">
+        {{form.as_p}} {% csrf_token %}
+        <button type="submit">LIBRO DE HABITACIONES</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

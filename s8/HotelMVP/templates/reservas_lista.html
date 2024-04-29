@@ -1,0 +1,54 @@
+{% extends 'base.html' %} {% block title %}Bienvenido al Hotel MVP{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+        <h2>Listado de reservas</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <!-- Columnas de la habitación -->
+                    <th>Número de Habitación</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Estado</th>
+                    <th>Ubicación</th>
+                    <!-- Columnas de la reserva -->
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Fin</th>
+                    <th>Estado de Reserva</th>
+                    <th>Estado de Pago</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reserva in reservas %}
+                <tr>
+                    <td>{{ reserva.user }}</td>
+                    <!-- Atributos de la habitación -->
+                    <td>{{ reserva.habitacion.numero }}</td>
+                    <td>{{ reserva.habitacion.categoria }}</td>
+                    <td>{{ reserva.habitacion.precio }}</td>
+                    <td>{{ reserva.habitacion.estado }}</td>
+                    <td>{{ reserva.habitacion.ubicacion }}</td>
+                    <!-- Atributos de la reserva -->
+                    <td>{{ reserva.fecha_inicio }}</td>
+                    <td>{{ reserva.fecha_fin }}</td>
+                    <td>{{ reserva.estado }}</td>
+                    <td>{{ reserva.pago }}</td>
+                    <td><a href="{% url 'HotelMVP:modificar_reserva' reserva.id %}" class="btn btn-primary">Modificar</a></td>
+                    <td><form method="POST" action="{% url 'HotelMVP:eliminar_reserva' reserva.id %}" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta reserva?')">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    
+    </div>
+  </div>
+</div>
+{% endblock %}

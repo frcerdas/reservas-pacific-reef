@@ -1,0 +1,30 @@
+{% extends 'base.html' %} 
+{% block title %}Bienvenido al Hotel MVP{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <h2>Lista de habitaciones</h2>
+    <p>Por favor, seleccione la habitación que desee.</p>
+    <div class="col-md-3">
+      <div class="card-deck">
+        {% for habitacion_info in habitacion_list %}
+        <div class="card">
+          <img src="{{ habitacion_info.habitacion.imagen_1.url }}" class="card-img-top" alt="Fotografía habitación">
+          <div class="card-body">
+            <h5 class="card-title">{{ habitacion_info.habitacion.categoria }}</h5>
+            <p class="card-text">{{ habitacion_info.habitacion.descripción|truncatewords:10 }}</p>
+            <p class="card-text">Precio: {{ habitacion_info.precio }}</p>
+            <p class="card-text">Número: {{ habitacion_info.numero }}</p>
+            <p class="card-text">Categoría: {{ habitacion_info.categoria }}</p>
+          </div>
+          <div class="card-footer">
+            <small class="text-muted"><a href="{{ habitacion_info.url }}" class="btn btn-primary">Ver Detalles</a></small>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
