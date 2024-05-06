@@ -5,64 +5,52 @@ from django.shortcuts import (
     get_object_or_404,
     redirect,
 )
-from .models import Habitaciones, Reservas
-from django.views.generic import TemplateView, ListView, FormView, View
-from .forms import DisponibilidadForm, ReservaForm, BancoForm
+from django.views import View
+from django.views.generic import TemplateView, ListView, FormView
+from .models import Habitaciones, Reservas, CustomUser
+from .forms import DisponibilidadForm, ReservaForm, BancoForm, RegistroForm
 from HotelMVP.reservas_funciones.disponibilidad import revisar_disponibilidad
 from django.urls import reverse
-from django.db.models import Q
-
-# Create your views here.
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate
+from django.utils.decorators import method_decorator
 
 
 class HomePageView(TemplateView):
     template_name = "home.html"
 
 
-from django.urls import reverse
+class HabitacionesListaVista(View):
+    def get(self, request):
+        habitaciones_disponibles = Habitaciones.objects.filter(estado="Disponible")
 
+        habitacion_list = []
+        for habitacion in habitaciones_disponibles:
+            habitacion_url = reverse(
+                "HotelMVP:HabitacionDetallesVista", kwargs={"numero": habitacion.numero}
+            )
+            habitacion_list.append(
+                {
+                    "habitacion": habitacion,
+                    "url": habitacion_url,
+                    "precio": habitacion.precio,
+                    "numero": habitacion.numero,
+                    "categoria": habitacion.categoria,
+                }
+            )
 
-def HabitacionesListaVista(request):
-    habitaciones_disponibles = Habitaciones.objects.filter(estado="Disponible")
-
-    # Crear lista para mantener las habitaciones y sus URLs
-    habitacion_list = []
-    for habitacion in habitaciones_disponibles:
-        # Construir la URL para cada habitación
-        habitacion_url = reverse(
-            "HotelMVP:HabitacionDetallesVista",
-            kwargs={"numero": habitacion.numero},
-        )
-        habitacion_list.append(
-            {
-                "habitacion": habitacion,
-                "url": habitacion_url,
-                "precio": habitacion.precio,
-                "numero": habitacion.numero,
-                "categoria": habitacion.categoria,
-            }
-        )
-
-    # Preparar el contexto con la lista de habitaciones
-    context = {
-        "habitacion_list": habitacion_list,
-    }
-
-    return render(request, "habitaciones_list_view.html", context)
+        context = {"habitacion_list": habitacion_list}
+        return render(request, "habitaciones_list_view.html", context)
 
 
 class ReservasLista(ListView):
     model = Reservas
-    template_name = (
-        "reservas_lista.html"  # Nombre del archivo HTML que quieres renderizar
-    )
-    context_object_name = "reservas"  # Nombre del contexto que se pasará a la plantilla
+    template_name = "reservas_lista.html"
+    context_object_name = "reservas"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["reserva"] = (
-            Reservas.objects.first()
-        )  # Aquí selecciona la reserva que quieras pasar al contexto
+        context["reserva"] = Reservas.objects.first()
         return context
 
 
@@ -72,11 +60,7 @@ class HabitacionDetallesVista(View):
         habitacion = get_object_or_404(Habitaciones, numero=numero)
         form = DisponibilidadForm()
         imagenes = [habitacion.imagen_1, habitacion.imagen_2, habitacion.imagen_3]
-        context = {
-            "habitacion": habitacion,
-            "imagenes": imagenes,
-            "form": form,
-        }
+        context = {"habitacion": habitacion, "imagenes": imagenes, "form": form}
         return render(request, "habitaciones_detalles_view.html", context)
 
     def post(self, request, *args, **kwargs):
@@ -123,7 +107,7 @@ class ReservasVista(FormView):
             ):
                 disponibilidad_habitaciones.append(habitacion)
 
-        if len(disponibilidad_habitaciones) > 0:
+        if disponibilidad_habitaciones:
             habitacion = disponibilidad_habitaciones[0]
             reservas = Reservas.objects.create(
                 user=self.request.user,
@@ -135,37 +119,86 @@ class ReservasVista(FormView):
             return HttpResponse(reservas)
         else:
             return HttpResponse(
-                "Todas las habitaciones de esta categoria están reservadas!! Inténte otra categoria"
+                "Todas las habitaciones de esta categoria están reservadas!! Inténte otra categoria."
             )
 
 
-def modificar_reserva(request, id_reserva):
-    reserva = get_object_or_404(Reservas, id=id_reserva)
-    if request.method == "POST":
+@method_decorator(login_required, name="dispatch")
+class ModificarReservaView(View):
+    def get(self, request, id_reserva):
+        reserva = get_object_or_404(Reservas, id=id_reserva)
+        form = ReservaForm(instance=reserva)
+        return render(
+            request, "modificar_reserva.html", {"form": form, "reserva": reserva}
+        )
+
+    def post(self, request, id_reserva):
+        reserva = get_object_or_404(Reservas, id=id_reserva)
         form = ReservaForm(request.POST, instance=reserva)
         if form.is_valid():
             form.save()
             return redirect(reverse("HotelMVP:ReservasLista"))
-    else:
-        form = ReservaForm(instance=reserva)
-    return render(request, "modificar_reserva.html", {"form": form, "reserva": reserva})
+        else:
+            return render(
+                request, "modificar_reserva.html", {"form": form, "reserva": reserva}
+            )
 
 
-def eliminar_reserva(request, id_reserva):
-    reserva = get_object_or_404(Reservas, id=id_reserva)
-    if request.method == "POST":
+@method_decorator(login_required, name="dispatch")
+class EliminarReservaView(View):
+    def post(self, request, id_reserva):
+        reserva = get_object_or_404(Reservas, id=id_reserva)
         reserva.delete()
         return redirect("HotelMVP:ReservasLista")
-    return redirect("HotelMVP:ReservasLista")
 
 
-def banco(request, id_reserva):
-    reserva = get_object_or_404(Reservas, id=id_reserva)
-    if request.method == "POST":
+@method_decorator(login_required, name="dispatch")
+class BancoView(View):
+    def get(self, request, id_reserva):
+        reserva = get_object_or_404(Reservas, id=id_reserva)
+        form = BancoForm(instance=reserva)
+        return render(request, "banco.html", {"form": form, "reserva": reserva})
+
+    def post(self, request, id_reserva):
+        reserva = get_object_or_404(Reservas, id=id_reserva)
         form = BancoForm(request.POST, instance=reserva)
         if form.is_valid():
             form.save()
             return redirect(reverse("HotelMVP:ReservasLista"))
-    else:
-        form = BancoForm(instance=reserva)
-    return render(request, "banco.html", {"form": form, "reserva": reserva})
+
+
+class RegistroView(View):
+    def get(self, request):
+        form = RegistroForm()
+        return render(request, "registro.html", {"form": form})
+
+    def post(self, request):
+        form = RegistroForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+            user.set_password(password)
+            user.save()
+            login(request, user)
+            return redirect("HotelMVP:home")
+        else:
+            return render(request, "registro.html", {"form": form})
+
+
+@method_decorator(login_required, name="dispatch")
+class LoginView(View):
+    def get(self, request):
+        return render(request, "login.html")
+
+    def post(self, request):
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("home")
+        else:
+            return render(
+                request, "login.html", {"error_message": "Credenciales inválidas"}
+            )

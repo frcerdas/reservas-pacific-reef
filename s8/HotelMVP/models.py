@@ -1,22 +1,23 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.utils.translation import gettext_lazy as _
+
 # Create your models here.
 
-#Tabla Habitaciones 
+
+# Tabla Habitaciones
 class Habitaciones(models.Model):
-    HAB_CATEGORIA = (
-        ('Turista', 'Turista'),
-        ('Premiun', 'Premium')
-    )
+    HAB_CATEGORIA = (("Turista", "Turista"), ("Premiun", "Premium"))
     ESTADO_OPCIONES = (
-        ('Disponible', 'Disponible'),
-        ('No disponible', 'No disponible'),
+        ("Disponible", "Disponible"),
+        ("No disponible", "No disponible"),
     )
     UBICACION_OPCIONES = (
-        ('Norponiente', 'Norponiente'),
-        ('Nororiente', 'Nororiente'),
-        ('Surponiente', 'Surponiente'),
-        ('Suroriente', 'Suroriente'),
+        ("Norponiente", "Norponiente"),
+        ("Nororiente", "Nororiente"),
+        ("Surponiente", "Surponiente"),
+        ("Suroriente", "Suroriente"),
     )
     numero = models.IntegerField()
     descripción = models.TextField()
@@ -24,31 +25,87 @@ class Habitaciones(models.Model):
     categoria = models.CharField(max_length=20, choices=HAB_CATEGORIA)
     estado = models.CharField(max_length=20, choices=ESTADO_OPCIONES)
     ubicacion = models.CharField(max_length=20, choices=UBICACION_OPCIONES)
-    imagen_1 = models.ImageField(upload_to='habitaciones', blank=True, null=True)
-    imagen_2 = models.ImageField(upload_to='habitaciones', blank=True, null=True)
-    imagen_3 = models.ImageField(upload_to='habitaciones', blank=True, null=True)
+    imagen_1 = models.ImageField(upload_to="habitaciones", blank=True, null=True)
+    imagen_2 = models.ImageField(upload_to="habitaciones", blank=True, null=True)
+    imagen_3 = models.ImageField(upload_to="habitaciones", blank=True, null=True)
 
     def __str__(self):
-        campos = [f"{field.name}: {getattr(self, field.name)}" for field in self._meta.fields if getattr(self, field.name) != "" and getattr(self, field.name) != None]
+        campos = [
+            f"{field.name}: {getattr(self, field.name)}"
+            for field in self._meta.fields
+            if getattr(self, field.name) != "" and getattr(self, field.name) != None
+        ]
         return ", ".join(campos)
 
-#Tabla Reservas
+
+# Tabla Reservas
 class Reservas(models.Model):
     ESTADO_RESERVAS = (
-        ('Confirmada', 'Confirmada'),
-        ('Pendiente', 'Pendiente'),
-        ('Cancelada', 'Cancelada'),
+        ("Confirmada", "Confirmada"),
+        ("Pendiente", "Pendiente"),
+        ("Cancelada", "Cancelada"),
     )
     ESTADO_PAGO = (
-        ('Pendiente', 'Pendiente'),
-        ('Realizado', 'Realizado'),
+        ("Pendiente", "Pendiente"),
+        ("Realizado", "Realizado"),
     )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     habitacion = models.ForeignKey(Habitaciones, on_delete=models.CASCADE)
-    fecha_inicio = models.DateTimeField() #check in llegada
-    fecha_fin = models.DateTimeField() #check out salida
+    fecha_inicio = models.DateTimeField()  # check in llegada
+    fecha_fin = models.DateTimeField()  # check out salida
     estado = models.CharField(max_length=20, choices=ESTADO_RESERVAS)
-    pago = models.CharField(max_length=20, choices=ESTADO_PAGO, default='Pendiente')  # Campo de pago
+    pago = models.CharField(
+        max_length=20, choices=ESTADO_PAGO, default="Pendiente"
+    )  # Campo de pago
 
     def __str__(self):
-        return f'{self.user} ha reservado la {self.habitacion} desde {self.fecha_inicio} hasta {self.fecha_fin}'
+        return f"{self.user} ha reservado la {self.habitacion} desde {self.fecha_inicio} hasta {self.fecha_fin}"
+
+
+class CustomUser(AbstractUser):
+    ROLES = (
+        ('admin', 'Administrador'),
+        ('worker', 'Trabajador'),
+        ('guest', 'Huésped'),
+    )
+    
+    role = models.CharField(max_length=10, choices=ROLES)
+    
+    # Agregar el argumento related_name para evitar conflictos
+    groups = models.ManyToManyField(
+        Group,
+        verbose_name=_('groups'),
+        blank=True,
+        related_name='customuser_set',
+        related_query_name='user',
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        verbose_name=_('user permissions'),
+        blank=True,
+        related_name='customuser_set',
+        related_query_name='user',
+    )
+    ROLES = (
+        ('admin', 'Administrador'),
+        ('worker', 'Trabajador'),
+        ('guest', 'Huésped'),
+    )
+    
+    role = models.CharField(max_length=10, choices=ROLES)
+    
+    # Agregar el argumento related_name para evitar conflictos
+    groups = models.ManyToManyField(
+        Group,
+        verbose_name=_('groups'),
+        blank=True,
+        related_name='customuser_set',
+        related_query_name='user',
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        verbose_name=_('user permissions'),
+        blank=True,
+        related_name='customuser_set',
+        related_query_name='user',
+    )
